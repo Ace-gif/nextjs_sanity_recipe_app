@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { Image } from 'next/image'
 import { useState } from 'react'
-import { usePreviewSubscription, urlFor, sanityClient, PortableText } from '../../lib/sanity'
+import { /* usePreviewSubscription */ sanityClient, urlFor, PortableText } from '../../lib/sanity'
 
 const recipesQuery = `*[_type == "recipe" && slug.current == $slug][0]{
     _id,
@@ -28,12 +28,12 @@ export default function OneRecipe({ data, preview }) {
 
     if (!data) return <div>Loading...</div>
 
-    const { data: recipe } = usePreviewSubscription(recipesQuery, {
-        params: { slug: data.recipe?.slug.current },
-        initialData: data,
-        enabled: preview
-
-    })
+    /*  const { data: recipe } = usePreviewSubscription(recipesQuery, {
+         params: { slug: data.recipe?.slug.current },
+         initialData: data,
+         enabled: preview
+ 
+     }) */
 
     const [likes, setLikes] = useState(data?.recipe?.likes);
 
@@ -47,6 +47,8 @@ export default function OneRecipe({ data, preview }) {
 
         setLikes(data.likes);
     }
+
+    const { recipe } = data
 
     return (
         <article className="recipe">
@@ -98,7 +100,7 @@ export async function getStaticProps({ params }) {
     const recipe = await sanityClient.fetch(recipesQuery, { slug })
 
     return {
-        props: { data: { recipe }, preview: true }
+        props: { data: { recipe }, /* preview: true  */ }
     }
 }
 //Access data from URL
