@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
+import { Image } from 'next/image'
 import { useState } from 'react'
-import { sanityClient, urlFor, usePreviewSubscription, PortableText } from '../../lib/sanity'
+import { usePreviewSubscription, urlFor, sanityClient, PortableText } from '../../lib/sanity'
 
 const recipesQuery = `*[_type == "recipe" && slug.current == $slug][0]{
     _id,
@@ -26,6 +27,7 @@ export default function OneRecipe({ data, preview }) {
     const router = useRouter()
 
     if (!data) return <div>Loading...</div>
+
     const { data: recipe } = usePreviewSubscription(recipesQuery, {
         params: { slug: data.recipe?.slug.current },
         initialData: data,
@@ -53,7 +55,7 @@ export default function OneRecipe({ data, preview }) {
                 {likes} 👍
             </button>
             <main className="content">
-                <img src={urlFor(recipe?.mainImage).url()} alt={recipe.name} />
+                <Image src={urlFor(recipe?.mainImage).url()} alt={recipe.name} />
                 <div className="breakdown">
                     <ul className="ingredients">
                         {recipe.ingredient?.map((ingredient) => (
